@@ -23,7 +23,7 @@ docker push harbor.10-35-151-40.nip.io/test/petclinic:latest'''
 
     stage('deploy') {
       steps {
-        withKubeCredentials() {
+        withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'prdrke2-k8s', namespace: '', serverUrl: '']]) {
           sh 'kubectl create deployment --image=harbor.10-35-151-40.nip.io/test/petclinic:latest petclinic '
         }
 
