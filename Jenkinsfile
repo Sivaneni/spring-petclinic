@@ -16,7 +16,7 @@ pipeline {
 
     stage('scan image') {
       steps {
-        neuvector nameOfVulnerabilityToExemptFour: '', standaloneScanner: true,
+        neuvector nameOfVulnerabilityToExemptFour: '',
         nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', 
         nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', 
         nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', 
