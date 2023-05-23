@@ -16,7 +16,12 @@ pipeline {
 
     stage('scan image') {
       steps {
-        neuvector nameOfVulnerabilityToExemptFour: '', nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', numberOfMediumSeverityToFail: '', registrySelection: 'Local', repository: 'harbor.10-35-151-40.nip.io/test/petclinic', scanLayers: true, scanTimeout: 10, tag: '${BUILD_NUMBER}'
+        neuvector nameOfVulnerabilityToExemptFour: '', standaloneScanner: true,
+        nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', 
+        nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', 
+        nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', 
+        numberOfMediumSeverityToFail: '', registrySelection: 'Local', repository: 'harbor.10-35-151-40.nip.io/test/petclinic', 
+        scanLayers: true, scanTimeout: 10, tag: '${BUILD_NUMBER}'
       }
     }
     stage('docker push') {
