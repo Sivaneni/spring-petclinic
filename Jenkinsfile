@@ -15,7 +15,9 @@ pipeline {
 
     stage('docker push') {
       steps {
-        sh 'docker push harbor.10-35-151-40.nip.io/test/petclinic:latest'
+        sh '''docker login --username admin --password Harbor12345 harbor.10-35-151-40.nip.io
+
+docker push harbor.10-35-151-40.nip.io/test/petclinic:latest'''
       }
     }
 
