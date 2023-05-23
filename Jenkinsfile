@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        sh './mvnw spring-boot:build-image'
+        sh './mvnw package'
       }
     }
 
