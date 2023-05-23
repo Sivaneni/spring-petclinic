@@ -9,8 +9,7 @@ pipeline {
 
     stage('docker build') {
       steps {
-        sh '''docker build -t harbor.10-35-151-40.nip.io/test/petclinic:latest
-'''
+        sh 'docker build -t harbor.10-35-151-40.nip.io/test/petclinic:latest .'
       }
     }
 
