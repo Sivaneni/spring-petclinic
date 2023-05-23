@@ -3,8 +3,7 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        sh '''env
-./mvnw package'''
+        sh './mvnw package'
       }
     }
 
@@ -27,8 +26,7 @@ pipeline {
     stage('docker push') {
       steps {
         sh '''docker login --username admin --password Harbor12345 harbor.10-35-151-40.nip.io
-
-docker push harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER}'''
+        docker push harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER}'''
       }
     }
 
@@ -36,8 +34,7 @@ docker push harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER}'''
       steps {
         withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'prdrke2-k8s', namespace: '', serverUrl: '']]) {
           sh '''kubectl create deployment --image=harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
-
-kubectl expose deploy petclinic --port=8080 --external-ip=10.35.151.198 --dry-run=client -o yaml |kubectl apply -f -'''
+          kubectl expose deploy petclinic --port=8080 --external-ip=10.35.151.198 --dry-run=client -o yaml |kubectl apply -f -'''
         }
 
       }
