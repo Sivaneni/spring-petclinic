@@ -14,6 +14,11 @@ pipeline {
       }
     }
 
+    stage('scan image') {
+      steps {
+        neuvector nameOfVulnerabilityToExemptFour: '', nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', numberOfMediumSeverityToFail: '', registrySelection: 'Local', repository: 'harbor.10-35-151-40.nip.io/test/petclinic', scanLayers: true, scanTimeout: 10, tag: '${BUILD_NUMBER}'
+      }
+    }
     stage('docker push') {
       steps {
         sh '''docker login --username admin --password Harbor12345 harbor.10-35-151-40.nip.io
@@ -30,12 +35,6 @@ docker push harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER}'''
 kubectl expose deploy petclinic --port=8080 --external-ip=10.35.151.198 --dry-run=client -o yaml |kubectl apply -f -'''
         }
 
-      }
-    }
-
-    stage('scan image') {
-      steps {
-        neuvector(repository: 'harbor.10-35-151-40.nip.io/test/petclinic', scanLayers: true, registrySelection: '${BUILD_NUMBER}')
       }
     }
 
