@@ -25,11 +25,17 @@ docker push harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER}'''
     stage('deploy') {
       steps {
         withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'prdrke2-k8s', namespace: '', serverUrl: '']]) {
-          sh '''#kubectl create deployment --image=harbor.10-35-151-40.nip.io/test/petclinic:latest petclinic 
+          sh '''kubectl create deployment --image=harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
 
-kubectl create deployment --image=harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER} petclinic  --dry-run -o yaml |kubectl apply -f - '''
+kubectl expose deploy petclinic --port=8080 --external-ip=10.35.151.198 --dry-run=client -o yaml |kubectl apply -f -'''
         }
 
+      }
+    }
+
+    stage('scan image') {
+      steps {
+        neuvector(repository: 'harbor.10-35-151-40.nip.io/test/petclinic', scanLayers: true, registrySelection: '${BUILD_NUMBER}')
       }
     }
 
