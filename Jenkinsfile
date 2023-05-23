@@ -17,7 +17,7 @@ pipeline {
     stage('scan image') {
       steps {
         neuvector nameOfVulnerabilityToExemptFour: '',
-        nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', 
+        nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', standaloneScanner: true,
         nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', 
         nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', 
         numberOfMediumSeverityToFail: '', registrySelection: 'Local', repository: 'harbor.10-35-151-40.nip.io/test/petclinic', 
