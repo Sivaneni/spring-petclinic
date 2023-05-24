@@ -2,9 +2,10 @@ pipeline {
   agent any
 
   stages {  
+    
     stage('SonarQube Analysis') {
       steps {
-        withSonarQubeEnv(credentialsId: 'sonarqube') {
+        withSonarQubeEnv(sonarqube) {
           sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName='PetClinic'"
         }
       }
