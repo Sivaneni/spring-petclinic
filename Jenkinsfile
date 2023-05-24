@@ -1,13 +1,14 @@
 pipeline {
   agent any
-  
-  stage('SonarQube Analysis') {
-    def mvn = tool 'Default Maven';
-    withSonarQubeEnv() {
-      sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName='PetClinic'"
+
+  stages {  
+    stage('SonarQube Analysis') {
+      def mvn = tool 'Default Maven';
+      withSonarQubeEnv() {
+        sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName='PetClinic'"
+      }
     }
-  }
-  stages {
+    
     stage('build') {
       steps {
         sh './mvnw package'
