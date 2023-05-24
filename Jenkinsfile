@@ -3,8 +3,10 @@ pipeline {
 
   stages {  
     stage('SonarQube Analysis') {
-      withSonarQubeEnv(credentialsId: 'sonarqube') {
-        sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName='PetClinic'"
+      steps {
+        withSonarQubeEnv(credentialsId: 'sonarqube') {
+          sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName='PetClinic'"
+        }
       }
     }
     
