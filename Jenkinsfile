@@ -8,7 +8,7 @@ pipeline {
         withSonarQubeEnv(credentialsId:'sonarqube',installationName:'sonarqube')  {
           sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName='PetClinic'"
         }
-        waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube',installationName:'sonarqube'
+        waitForQualityGate abortPipeline: false, credentialsId: 'sonarqube',installationName:'sonarqube' 
       }
     }
     
