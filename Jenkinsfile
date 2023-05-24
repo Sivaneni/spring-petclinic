@@ -3,8 +3,7 @@ pipeline {
 
   stages {  
     stage('SonarQube Analysis') {
-      def mvn = tool 'Default Maven';
-      withSonarQubeEnv() {
+      withSonarQubeEnv(credentialsId: 'sonarqube') {
         sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName='PetClinic'"
       }
     }
