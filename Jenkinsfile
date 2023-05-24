@@ -33,8 +33,8 @@ pipeline {
     stage('deploy') {
       steps {
         withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'prdrke2-k8s', namespace: '', serverUrl: '']]) {
-          sh '''kubectl create deployment --image=harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
-          kubectl expose deploy petclinic --port=8080 --external-ip=10.35.151.198 --dry-run=client -o yaml |kubectl apply -f -'''
+          sh '''kubectl create deployment -n pet --image=harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
+          kubectl expose deploy petclinic -n pet --port=8080 --external-ip=10.35.151.198 --dry-run=client -o yaml |kubectl apply -f -'''
         }
 
       }
