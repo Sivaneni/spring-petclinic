@@ -28,8 +28,8 @@ pipeline {
         neuvector nameOfVulnerabilityToExemptFour: '',
         nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', standaloneScanner: true,
         nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', 
-        nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', 
-        numberOfMediumSeverityToFail: '', registrySelection: 'Local', repository: 'jfrog-cr.10-35-151-40.nip.io/docker-local/petclinic', 
+        nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '1', 
+        numberOfMediumSeverityToFail: '1', registrySelection: 'Local', repository: 'jfrog-cr.10-35-151-40.nip.io/docker-local/petclinic', 
         scanLayers: true, scanTimeout: 10, tag: '${BUILD_NUMBER}'
       }
     }
