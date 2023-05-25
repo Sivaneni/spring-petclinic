@@ -19,7 +19,7 @@ pipeline {
 
     stage('docker build') {
       steps {
-        sh 'docker build -t jfrog-cr.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER} .'
+        sh 'docker build -t jfrog-cr.10-35-151-40.nip.io/docker-local/petclinic:${BUILD_NUMBER} .'
       }
     }
 
@@ -29,14 +29,14 @@ pipeline {
         nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', standaloneScanner: true,
         nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', 
         nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', 
-        numberOfMediumSeverityToFail: '', registrySelection: 'Local', repository: 'jfrog-cr.10-35-151-40.nip.io/test/petclinic', 
+        numberOfMediumSeverityToFail: '', registrySelection: 'Local', repository: 'jfrog-cr.10-35-151-40.nip.io/docker-local/petclinic', 
         scanLayers: true, scanTimeout: 10, tag: '${BUILD_NUMBER}'
       }
     }
     stage('docker push') {
       steps {
         withDockerRegistry(credentialsId: 'admin-jcr', url: 'https://jfrog-cr.10-35-151-40.nip.io/') {
-        sh 'docker push jfrog-cr.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER}'
+        sh 'docker push jfrog-cr.10-35-151-40.nip.io/docker-local/petclinic:${BUILD_NUMBER}'
         }
         
       }
@@ -45,7 +45,7 @@ pipeline {
     stage('deploy') {
       steps {
         withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'prdrke2-k8s', namespace: '', serverUrl: '']]) {
-          sh '''kubectl create deployment -n pet1 --image=jfrog-cr.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
+          sh '''kubectl create deployment -n pet1 --image=jfrog-cr.10-35-151-40.nip.io/docker-local/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
           kubectl expose deploy petclinic -n pet1 --port=8080 --external-ip=10.35.151.199 --dry-run=client -o yaml |kubectl apply -f -'''
         }
 
