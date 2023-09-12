@@ -35,7 +35,7 @@ pipeline {
     }
     stage('configure docker ca cert'){
         withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'prdrke2-k8s', namespace: '', serverUrl: '']]) {
-          sh "kubectl get secret -n jfrog jfrog-tls -o jsonpath='{.data.tls\.key}' | base64 -d > /etc/docker/certs.d/jfrog-cr.10-35-151-40.nip.io/ca.crt"
+          sh "kubectl get secret -n jfrog jfrog-tls -o jsonpath='{.data.tls\\.key}' | base64 -d > /etc/docker/certs.d/jfrog-cr.10-35-151-40.nip.io/ca.crt"
         }
     }
     stage('docker push') {
