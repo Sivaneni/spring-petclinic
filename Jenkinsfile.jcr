@@ -35,6 +35,9 @@ pipeline {
     }
     stage('docker push') {
       steps {
+          withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'prdrke2-k8s', namespace: '', serverUrl: '']]) {
+          sh '''kubectl get secret -n jfrog jfrog-tls -o jsonpath='{.data.tls\.key}' |base64 -d > /etc/docker/certs.d/jfrog-cr.10-35-151-40.nip.io/ca.crt'''
+        }
         withDockerRegistry(credentialsId: 'admin-jcr', url: 'https://jfrog-cr.10-35-151-40.nip.io/') {
         sh 'docker push jfrog-cr.10-35-151-40.nip.io/docker-local/petclinic:${BUILD_NUMBER}'
         }
