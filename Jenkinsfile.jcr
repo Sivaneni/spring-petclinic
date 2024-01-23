@@ -54,8 +54,9 @@ pipeline {
     stage('DAST ZAP') {
       steps {
         sh ''' proto=http
-               /opt/ZAP/zap.sh -port 9999 -cmd -quickurl ${proto}://petclinic.10-35-151-199.nip.io/ -quickout zap-${BUILD_NUMBER}.html -quickprogress
+               /opt/ZAP/zap.sh -port 9999 -cmd -quickurl ${proto}://petclinic.10-35-151-199.nip.io/ -quickout ${WORKSPACE}/zap-${BUILD_NUMBER}.html -quickprogress
            '''
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: '${env.WORKSPACE}', reportFiles: 'zap-${env.BUILD_NUMBER}.html', reportName: 'ZAP OWASP Report', reportTitles: '', useWrapperFileDirectly: true])
       }
     }
   }
