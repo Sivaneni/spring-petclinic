@@ -57,7 +57,7 @@ pipeline {
                mkdie -p ${WORKSPACE}/zap/
                /opt/ZAP/zap.sh -port 9999 -cmd -quickurl ${proto}://petclinic.10-35-151-199.nip.io/ -quickout ${WORKSPACE}/zap/zap-${BUILD_NUMBER}.html -quickprogress
            '''
-        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true,reportDir: 'zap', reportFiles: 'zap-${BUILD_NUMBER}.html', reportName: 'ZAP OWASP Report', reportTitles: 'ZAP OWASP Report', useWrapperFileDirectly: true])
+        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'zap', reportFiles: 'zap-${BUILD_NUMBER}.html', reportName: 'ZAP OWASP Report', reportTitles: '', useWrapperFileDirectly: true])
       }
     }
   }
