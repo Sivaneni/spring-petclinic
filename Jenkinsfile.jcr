@@ -61,6 +61,7 @@ pipeline {
                docker run --rm -v ${WORKSPACE}/zap/:/zap/wrk/:rw -t ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py -t ${proto}://petclinic.10-35-151-199.nip.io -g gen.conf -r zap-${BUILD_NUMBER}.html
            '''
         publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'zap', reportFiles: 'zap-${BUILD_NUMBER}.html', reportName: 'ZAP OWASP Report', reportTitles: '', useWrapperFileDirectly: true])
+        sh 'rm -rf ${WORKSPACE}/zap'
         }
     }
   }
