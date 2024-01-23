@@ -53,7 +53,9 @@ pipeline {
     }
     stage('DAST ZAP') {
       steps {
-        sh '/opt/ZAP/zap.sh -port 9999 -cmd -quickurl http://petclinic.10-35-151-199.nip.io/ -quickout zap-${BUILD_NUMBER}.html -quickprogress'
+        sh ''' proto=http
+               /opt/ZAP/zap.sh -port 9999 -cmd -quickurl ${proto}://petclinic.10-35-151-199.nip.io/ -quickout zap-${BUILD_NUMBER}.html -quickprogress
+           '''
       }
     }
   }
