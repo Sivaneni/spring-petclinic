@@ -49,9 +49,12 @@ pipeline {
           kubectl expose deploy petclinic -n pet1 --port=8080 --dry-run=client -o yaml |kubectl apply -f -
           kubectl create ingress -n pet1 pet-ingress --class=nginx1 --rule="petclinic.10-35-151-199.nip.io/*=petclinic:8080" --dry-run=client -o yaml | kubectl apply -f -'''
         }
-
       }
     }
-
+    stage('DAST ZAP') {
+      steps {
+        sh '/opt/ZAP/zap.sh -port 9999 -cmd -quickurl http://petclinic.10-35-151-199.nip.io/ -quickout zap-${BUILD_NUMBER}.html -quickprogress'
+      }
+    }
   }
 }
