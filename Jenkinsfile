@@ -25,7 +25,7 @@ pipeline {
 
     stage('scan image') {
       steps {
-        sh 'trivy image sahera1987143/petclinic:${BUILD_NUMBER}'
+        sh 'trivy image --scanners vuln sahera1987143/petclinic:${BUILD_NUMBER}'
       }
     }
     stage('docker push') {
