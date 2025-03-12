@@ -38,9 +38,9 @@ pipeline {
 
     stage('deploy') {
       steps {
-        withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'prdrke2-k8s', namespace: '', serverUrl: '']]) {
-          sh '''kubectl create deployment -n pet --image=sahera1987143/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
-          kubectl expose deploy petclinic -n pet --port=8080 --dry-run=client -o yaml |kubectl apply -f -'''
+        withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s1', namespace: '', serverUrl: '']]) {
+          sh '''kubectl create deployment --image=sahera1987143/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
+          kubectl expose deploy petclinic --port=8080 --dry-run=client -o yaml |kubectl apply -f -'''
         }
 
       }
