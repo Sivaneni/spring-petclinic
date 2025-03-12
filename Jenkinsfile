@@ -25,12 +25,7 @@ pipeline {
 
     stage('scan image') {
       steps {
-        neuvector nameOfVulnerabilityToExemptFour: '',
-        nameOfVulnerabilityToExemptOne: '', nameOfVulnerabilityToExemptThree: '', standaloneScanner: true,
-        nameOfVulnerabilityToExemptTwo: '', nameOfVulnerabilityToFailFour: '', nameOfVulnerabilityToFailOne: '', 
-        nameOfVulnerabilityToFailThree: '', nameOfVulnerabilityToFailTwo: '', numberOfHighSeverityToFail: '', 
-        numberOfMediumSeverityToFail: '', registrySelection: 'Local', repository: 'harbor.10-35-151-40.nip.io/test/petclinic', 
-        scanLayers: true, scanTimeout: 10, tag: '${BUILD_NUMBER}'
+        sh 'trivy image harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER}'
       }
     }
     stage('docker push') {
@@ -38,7 +33,6 @@ pipeline {
         withDockerRegistry(credentialsId: 'admin-Harbor', url: 'https://harbor.10-35-151-40.nip.io/') {
         sh 'docker push harbor.10-35-151-40.nip.io/test/petclinic:${BUILD_NUMBER}'
         }
-        
       }
     }
 
