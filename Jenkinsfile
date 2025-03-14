@@ -1,29 +1,17 @@
 pipeline {
     agent any
+    environment {
+        JAVA_HOME = '/opt/java/openjdk' // Set this to the correct path for your Java installation
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+    }
 
     stages {
         stage('Build') {
-            steps {
-                sh '''
-                export JAVA_HOME=/opt/java/openjdk
-                export PATH=$JAVA_HOME/bin:$PATH
-                echo "JAVA_HOME is set to $JAVA_HOME"
-                java -version
-                ./mvnw clean package
-                '''
-            }
-        }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar-scanner') {
-                    sh '''
-                    export JAVA_HOME=/opt/java/openjdk
-                    export PATH=$JAVA_HOME/bin:$PATH
-                    echo "JAVA_HOME is set to $JAVA_HOME"
-                    java -version
-                    ./mvnw verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName="PetClinic"
-                    '''
+                    sh './mvnw verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName="PetClinic"'
                 }
             }
         }
