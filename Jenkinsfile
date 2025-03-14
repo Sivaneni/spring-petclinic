@@ -4,14 +4,26 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'export JAVA_HOME=/opt/java/openjdk && export PATH=$JAVA_HOME/bin:$PATH && ./mvnw clean package'
+                sh '''
+                export JAVA_HOME=/opt/java/openjdk
+                export PATH=$JAVA_HOME/bin:$PATH
+                echo "JAVA_HOME is set to $JAVA_HOME"
+                java -version
+                ./mvnw clean package
+                '''
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar-scanner') {
-                    sh 'export JAVA_HOME=/opt/java/openjdk && export PATH=$JAVA_HOME/bin:$PATH && ./mvnw verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName="PetClinic"'
+                    sh '''
+                    export JAVA_HOME=/opt/java/openjdk
+                    export PATH=$JAVA_HOME/bin:$PATH
+                    echo "JAVA_HOME is set to $JAVA_HOME"
+                    java -version
+                    ./mvnw verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName="PetClinic"
+                    '''
                 }
             }
         }
@@ -39,12 +51,3 @@ pipeline {
         stage('Deploy') {
             steps {
                 withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s1', namespace: '', serverUrl: '']]) {
-                    sh '''
-                    kubectl create deployment --image=sahera1987143/petclinic:${BUILD_NUMBER} petclinic --dry-run=client -o yaml | kubectl apply -f -
-                    kubectl expose deploy petclinic --port=8080 --type=NodePort --dry-run=client -o yaml | kubectl apply -f -
-                    '''
-                }
-            }
-        }
-    }
-}
