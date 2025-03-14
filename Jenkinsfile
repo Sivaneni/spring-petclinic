@@ -1,5 +1,9 @@
 pipeline {
   agent any
+  environment {
+        JAVA_HOME = '/opt/java/openjdk' // Set this to the correct path for your Java installation
+        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+    }
 
   stages {  
     
