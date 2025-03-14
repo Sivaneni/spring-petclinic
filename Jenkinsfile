@@ -1,50 +1,50 @@
 pipeline {
-    agent any
-    environment {
-        JAVA_HOME = '/opt/java/openjdk' // Set this to the correct path for your Java installation
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
+  agent any
+
+  stages {  
+    
+    stage('SonarQube Analysis') {
+      steps {
+        withSonarQubeEnv(credentialsId:'sonarqube',installationName:'sonarqube')  {
+          sh "./mvnw clean verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName='PetClinic'"
+        }
+      }
+    }
+    
+    stage('build') {
+      steps {
+        sh './mvnw package'
+      }
     }
 
-    stages {
-        stage('Build') {
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sonar-scanner') {
-                    sh './mvnw verify sonar:sonar -Dsonar.projectKey=PetClinic -Dsonar.projectName="PetClinic"'
-                }
-            }
-        }
-
-        stage('Docker Build') {
-            steps {
-                sh 'docker build -t sahera1987143/petclinic:${BUILD_NUMBER} .'
-            }
-        }
-
-        stage('Scan Image') {
-            steps {
-                sh 'trivy image --scanners vuln sahera1987143/petclinic:${BUILD_NUMBER}'
-            }
-        }
-
-        stage('Docker Push') {
-            steps {
-                withDockerRegistry(credentialsId: 'dockerhub', url: '') {
-                    sh 'docker push sahera1987143/petclinic:${BUILD_NUMBER}'
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s1', namespace: '', serverUrl: '']]) {
-                    sh '''
-                    kubectl create deployment --image=sahera1987143/petclinic:${BUILD_NUMBER} petclinic --dry-run=client -o yaml | kubectl apply -f -
-                    kubectl expose deploy petclinic --port=8080 --type=NodePort --dry-run=client -o yaml | kubectl apply -f -
-                    '''
-                }
-            }
-        }
+    stage('docker build') {
+      steps {
+        sh 'docker build -t sahera1987143/petclinic:${BUILD_NUMBER} .'
+      }
     }
+
+    stage('scan image') {
+      steps {
+        sh 'trivy image --scanners vuln sahera1987143/petclinic:${BUILD_NUMBER}'
+      }
+    }
+    stage('docker push') {
+      steps {
+        withDockerRegistry(credentialsId: 'dockerhub', url: '') {
+        sh 'docker push sahera1987143/petclinic:${BUILD_NUMBER}'
+        }
+      }
+    }
+
+    stage('deploy') {
+      steps {
+        withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s1', namespace: '', serverUrl: '']]) {
+          sh '''kubectl create deployment --image=sahera1987143/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
+          kubectl expose deploy petclinic --port=8080 --type=NodePort --dry-run=client -o yaml |kubectl apply -f -'''
+        }
+
+      }
+    }
+
+  }
 }
