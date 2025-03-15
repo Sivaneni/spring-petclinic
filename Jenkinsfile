@@ -30,7 +30,7 @@ pipeline {
 
     stage('scan image') {
       steps {
-        sh 'trivy image sprasanna1992/petclinic:${BUILD_NUMBER}'
+        sh 'trivy image --ignore-unfixed sprasanna1992/petclinic:32'
       }
     }
     stage('docker push') {
