@@ -30,7 +30,7 @@ pipeline {
 
     stage('scan image') {
       steps {
-        sh 'trivy image --vuln-type os,library sprasanna1992/petclinic:${BUILD_NUMBER}'
+        sh 'trivy image sprasanna1992/petclinic:${BUILD_NUMBER}'
       }
     }
     stage('docker push') {
