@@ -43,7 +43,7 @@ pipeline {
 
     stage('deploy') {
       steps {
-        withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s1', namespace: '', serverUrl: '']]) {
+       withCredentials([file(credentialsId: 'k8s-config', variable: 'KUBECONFIG')]) {
           sh '''kubectl create deployment --image=sprasanna1992/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
           kubectl expose deploy petclinic --port=8080 --type=NodePort --dry-run=client -o yaml |kubectl apply -f -'''
         }
