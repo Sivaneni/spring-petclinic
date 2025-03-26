@@ -41,9 +41,18 @@ pipeline {
       }
     }
 
+    // stage('deploy') {
+    //   steps {
+    //    withCredentials([file(credentialsId: 'k8s-config', variable: 'KUBECONFIG')]) {
+    //       sh '''kubectl create deployment --image=sprasanna1992/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
+    //       kubectl expose deploy petclinic --port=8080 --type=NodePort --dry-run=client -o yaml |kubectl apply -f -'''
+    //     }
+
+    //   }
+    // }
     stage('deploy') {
       steps {
-       withCredentials([file(credentialsId: 'k8s-config', variable: 'KUBECONFIG')]) {
+       withCredentials([file(credentialsId: 'k8-cred')]) {
           sh '''kubectl create deployment --image=sprasanna1992/petclinic:${BUILD_NUMBER} petclinic  --dry-run=client -o yaml |kubectl apply -f -
           kubectl expose deploy petclinic --port=8080 --type=NodePort --dry-run=client -o yaml |kubectl apply -f -'''
         }
